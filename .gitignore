@@ -1,0 +1,24 @@
+### macOS ###
+# General
+.DS_Store
+
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+.pnpm-debug.log*
+
+
+# Compiled binary addons (https://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Optional npm cache directory
+.npm

@@ -1,0 +1,18 @@
+version: '3.9'
+services:
+  db:
+    image: mysql:8.3.0
+    container_name: mysql-gevtech-db
+    environment:
+      MYSQL_ROOT_PASSWORD: strong_password
+      MYSQL_DATABASE: example_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql-config:/etc/mysql/conf.d
+      - ./test:/docker-entrypoint-initdb.d
+volumes:
+  db_data:
