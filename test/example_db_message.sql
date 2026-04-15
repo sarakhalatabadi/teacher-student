@@ -16,34 +16,26 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `notification`
+-- Table structure for table `message`
 --
 
-DROP TABLE IF EXISTS `notification`;
+DROP TABLE IF EXISTS `message`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `notification` (
+CREATE TABLE `message` (
   `id` binary(16) NOT NULL,
-  `message_id` binary(16) NOT NULL,
-  `student_id` binary(16) NOT NULL,
-  `teacher_id` binary(16) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `teacher_notif_key` (`teacher_id`),
-  KEY `student_notif_key` (`student_id`),
-  KEY `message_notif_key` (`message_id`),
-  CONSTRAINT `message_notif_key` FOREIGN KEY (`message_id`) REFERENCES `message` (`id`),
-  CONSTRAINT `student_notif_key` FOREIGN KEY (`student_id`) REFERENCES `student` (`id`),
-  CONSTRAINT `teacher_notif_key` FOREIGN KEY (`teacher_id`) REFERENCES `teacher` (`id`)
+  `text` varchar(256) NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `notification`
+-- Dumping data for table `message`
 --
 
-LOCK TABLES `notification` WRITE;
-/*!40000 ALTER TABLE `notification` DISABLE KEYS */;
-/*!40000 ALTER TABLE `notification` ENABLE KEYS */;
+LOCK TABLES `message` WRITE;
+/*!40000 ALTER TABLE `message` DISABLE KEYS */;
+/*!40000 ALTER TABLE `message` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -55,4 +47,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-04-13  1:38:04
+-- Dump completed on 2026-04-16  4:05:34
