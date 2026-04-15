@@ -12,22 +12,22 @@ async function registerStudent(req, res) {
   const { teacher, students } = req.body;
 
   if (!teacher || typeof teacher !== 'string') {
-    return res.status(400).json({ error: 'Teacher email is required' });
+    return res.status(400).json({ message: 'Teacher email is required' });
   }
   if (!Array.isArray(students) || students.length === 0) {
-    return res.status(400).json({ error: 'Students list is required' });
+    return res.status(400).json({ message: 'Students list is required' });
   }
 
   try {
     const teacherRow = await getTeacherIdByEmail(teacher);
     if (!teacherRow) {
-      return res.status(404).json({ error: 'Teacher not found' });
+      return res.status(404).json({ message: 'Teacher not found' });
     }
 
     const uniqueStudentEmails = [...new Set(students)];
     const studentRows = await getStudentListByEmailList(uniqueStudentEmails);
     if (studentRows.length !== uniqueStudentEmails.length) {
-      return res.status(400).json({ error: 'Some students not found' });
+      return res.status(400).json({ message: 'Some students not found' });
     }
 
     const idByEmail = new Map(studentRows.map((row) => [row.email, row.id]));
@@ -38,7 +38,7 @@ async function registerStudent(req, res) {
     console.error('Error registering student:', error);
     return res
       .status(500)
-      .json({ error: 'Internal server error in getting teacher or students' });
+      .json({ message: 'Internal server error in getting teacher or students' });
   }
 }
 
@@ -47,7 +47,7 @@ async function getStudentListByTeacherList(req, res) {
     let teachers = req.query.teacher;
   
     if (!teachers) {
-      return res.status(400).json({ error: 'Teacher list is required' });
+      return res.status(400).json({ message: 'Teacher list is required' });
     }
   
     if (!Array.isArray(teachers)) {
@@ -62,7 +62,7 @@ async function getStudentListByTeacherList(req, res) {
       const missingIndex = teacherRows.findIndex((row) => !row);
       if (missingIndex !== -1) {
         return res.status(404).json({
-          error: `Teacher not found: ${teachers[missingIndex]}`,
+          message: `Teacher not found: ${teachers[missingIndex]}`,
         });
       }
 
@@ -104,7 +104,7 @@ async function getStudentListByTeacherList(req, res) {
     } catch (error) {
       console.error(error);
       return res.status(500).json({
-        error: 'Internal server error'
+        message: 'Internal server error'
       });
     }
   }
@@ -158,34 +158,34 @@ async function getStudentListByTeacherList(req, res) {
       return res.status(200).json({ recipients });
     } catch (error) {
       console.error('Error sending notification recipients:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 
   async function suspend(req, res){
     const studentEmail = req.body.student;
     if (!studentEmail || typeof studentEmail !== 'string') {
-      return res.status(400).json({ error: 'student email is required.'})
+      return res.status(400).json({ message: 'student email is required.'})
     }
     try
     {
       const studentId = await getStudentIdByEmail(studentEmail);
       if (!studentId) {
-        return res.status(404).json({ error: 'student not found.'})
+        return res.status(404).json({ message: 'student not found.'})
       }
       const isActive = await checkIfStudentIsActive(studentId);
       if (!isActive) {
-        return res.status(400).json({ error: 'student is already suspended.'})
+        return res.status(400).json({ message: 'student is already suspended.'})
       }
       const suspendResult = await suspendStudent(studentId);
       if (!suspendResult) {
-        return res.status(500).json({ error: 'Failed to suspend student.'})
+        return res.status(500).json({ message: 'Failed to suspend student.'})
       }
-      return res.status(204).send({message: 'Student suspended successfully.'});
+      return res.status(204).send();
     }
     catch(error){
       console.error('Error suspending student:', error);
-      return res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ message: 'Internal server error' });
     }
 
   }
