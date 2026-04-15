@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.45, for macos15 (arm64)
 --
--- Host: 127.0.0.1    Database: example_db
+-- Host: 127.0.0.1    Database: govtech_assessment
 -- ------------------------------------------------------
 -- Server version	8.3.0
 
