@@ -156,6 +156,18 @@ describe('API user stories and error paths', () => {
       expect(response.status).toBe(404);
       expect(response.body).toEqual({ message: 'student not found.' });
     });
+
+    test('returns 204 when student is already suspended (idempotent)', async () => {
+      studentRepo.getStudentIdByEmail.mockResolvedValue('s1');
+      studentRepo.checkIfStudentIsActive.mockResolvedValue(false);
+
+      const response = await request(app).post('/api/suspend').send({
+        student: 'studentmary@gmail.com',
+      });
+
+      expect(response.status).toBe(204);
+      expect(studentRepo.suspendStudent).not.toHaveBeenCalled();
+    });
   });
 
   describe('POST /api/retrievefornotifications', () => {
@@ -179,6 +191,19 @@ describe('API user stories and error paths', () => {
         recipients: expect.arrayContaining(['studentbob@gmail.com', 'studentagnes@gmail.com']),
       });
       expect(response.body.recipients).toHaveLength(2);
+    });
+
+    test('does not include emails in notification text that are not @mentioned', async () => {
+      teacherRepo.getTeacherIdByEmail.mockResolvedValue({ id: 't1' });
+      teacherStudentRepo.getStudentsByTeacherId.mockResolvedValue([]);
+
+      const response = await request(app).post('/api/retrievefornotifications').send({
+        teacher: 'teacherken@gmail.com',
+        notification: 'Please contact studentjon@gmail.com for details',
+      });
+
+      expect(response.status).toBe(200);
+      expect(response.body.recipients).toHaveLength(0);
     });
 
     test('returns 400 when notification is missing', async () => {

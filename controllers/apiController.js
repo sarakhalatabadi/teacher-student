@@ -141,7 +141,7 @@ async function getStudentListByTeacherList(req, res) {
       ).filter(Boolean);
 
       const mentionedEmails =
-        notification.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/g) || [];
+        notification.match(/(?<=@)[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/g) || [];
 
       const activeMentionedEmails = [];
 
@@ -175,7 +175,7 @@ async function getStudentListByTeacherList(req, res) {
       }
       const isActive = await checkIfStudentIsActive(studentId);
       if (!isActive) {
-        return res.status(400).json({ message: 'student is already suspended.'})
+        return res.status(204).send();
       }
       const suspendResult = await suspendStudent(studentId);
       if (!suspendResult) {
