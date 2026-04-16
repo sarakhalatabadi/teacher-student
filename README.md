@@ -72,14 +72,18 @@ pnpm test
 
 ### Current test coverage (highlight)
 
-- **9 tests are currently passing** in `test/apiController.test.js`.
+- **12 tests are currently passing** in `test/apiController.test.js`.
 - Includes happy-path coverage for all 4 user stories.
 - Includes key negative paths:
   - missing teacher on register (`400`)
   - teacher not found on register (`404`)
   - missing teacher query for commonstudents (`400`)
+  - unknown teacher in commonstudents (`404`)
   - student not found on suspend (`404`)
   - missing notification text (`400`)
+  - unknown teacher in retrievefornotifications (`404`)
+- Includes duplicate-handling coverage:
+  - duplicate student emails in register request are deduplicated/idempotent (`204`)
 
 ## API endpoints
 

@@ -5,6 +5,16 @@ async function registerStudentToTeacher(teacherId, studentIds) {
   try {
     await connection.beginTransaction();
     for (const studentId of studentIds) {
+      const [existingRows] = await connection.execute(
+        'SELECT 1 FROM teacher_student WHERE teacher_id = ? AND student_id = ? LIMIT 1',
+        [teacherId, studentId]
+      );
+
+      // Idempotent registration: if link already exists, skip insert.
+      if (existingRows.length > 0) {
+        continue;
+      }
+
       await connection.execute(
         `INSERT INTO teacher_student (id, teacher_id, student_id)
          VALUES (UUID_TO_BIN(UUID(), 1), ?, ?)`,
