@@ -1,4 +1,4 @@
-# GovTech Node.js API Assessment
+Node.js API Assessment
 
 Node.js + MySQL implementation of the teacher/student administrative API.
 
